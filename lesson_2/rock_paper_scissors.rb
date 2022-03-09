@@ -7,7 +7,7 @@ VALID_CHOICES = {
 }
 
 def prompt(message)
-  puts ">> #{message}"
+  puts ">> #{message}\n"
 end
 
 def win?(first, second)
@@ -50,8 +50,12 @@ def valid_choice?(choice)
   if VALID_CHOICES.key?(choice)
     true
   else
-    prompt("That's not a valid choice.")
+    false
   end
+end
+
+def display_invalid_choice_prompt
+  prompt("That's not a valid choice.")
 end
 
 def update_score(user_choice, computer_choice, score)
@@ -63,41 +67,46 @@ def update_score(user_choice, computer_choice, score)
 end
 
 def display_score(score)
-  prompt("You've won #{score[:user_score]} games.
-     Computer has won #{score[:computer_score]} games.")
+  prompt("You've won #{score[:user_score]} games."\
+    " Computer has won #{score[:computer_score]} games.")
 end
 
 def display_winner?(score)
   if score[:user_score] == 3
-    prompt("Congratulations you win!
-       Final score: #{score[:user_score]} to #{score[:computer_score]}")
+    prompt("Congratulations you win!"\
+      " Final score: #{score[:user_score]} to #{score[:computer_score]}")
   elsif score[:computer_score] == 3
-    prompt("Game over. You lose.
-       Final score: #{score[:user_score]} to #{score[:computer_score]}")
+    prompt("Game over. You lose."\
+      " Final score: #{score[:user_score]} to #{score[:computer_score]}")
   end
+end
+
+def validated_choice
+  user_choice = gets.chomp
+  return user_choice if valid_choice?(user_choice)
+  display_invalid_choice_prompt()
 end
 
 user_choice = ''
 
 loop do
   score = { user_score: 0, computer_score: 0 }
-  prompt("Lets play Rock, Paper, Scissors, Lizard, Spock.
-     First to 3 games wins!")
+  prompt("Lets play Rock, Paper, Scissors, Lizard, Spock."\
+    " First to 3 games wins!")
   loop do
     sleep 2
     loop do
       display_valid_choices()
-
-      user_choice = gets.chomp
-      break if valid_choice?(user_choice)
+      user_choice = validated_choice()
+      break if user_choice
     end
 
     computer_choice = VALID_CHOICES.keys.sample
 
     sleep 1
 
-    prompt("You chose: #{VALID_CHOICES[user_choice]}
-       and Computer chose: #{VALID_CHOICES[computer_choice]}")
+    prompt("You chose: #{VALID_CHOICES[user_choice]}"\
+      " and Computer chose: #{VALID_CHOICES[computer_choice]}")
 
     display_result(user_choice, computer_choice)
 
@@ -113,6 +122,7 @@ loop do
   end
   sleep 2
   break unless play_again?()
+  system('clear')
 end
 
 prompt("Thank you for playing. Goodbye!")
