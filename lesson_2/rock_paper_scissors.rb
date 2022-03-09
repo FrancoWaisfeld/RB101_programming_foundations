@@ -41,7 +41,7 @@ def display_valid_choices
   prompt("Type the corresponding letter to select your option.")
   print ">> "
   VALID_CHOICES.each do |key, value|
-    print ("#{value}: #{key} | ")
+    print "#{key}: #{value} | "
   end
   puts()
 end
@@ -63,23 +63,28 @@ def update_score(user_choice, computer_choice, score)
 end
 
 def display_score(score)
-  prompt("You've won #{score[:user_score]} games. Computer has won #{score[:computer_score]} games.")
+  prompt("You've won #{score[:user_score]} games.
+     Computer has won #{score[:computer_score]} games.")
 end
 
 def display_winner?(score)
   if score[:user_score] == 3
-    prompt("Congratulations you win! Final score: #{score[:user_score]} to #{score[:computer_score]}")
+    prompt("Congratulations you win!
+       Final score: #{score[:user_score]} to #{score[:computer_score]}")
   elsif score[:computer_score] == 3
-    prompt("Game over. You lose. Final score: #{score[:user_score]} to #{score[:computer_score]}")
+    prompt("Game over. You lose.
+       Final score: #{score[:user_score]} to #{score[:computer_score]}")
   end
 end
 
 user_choice = ''
 
 loop do
-  score = {user_score: 0, computer_score: 0}
-  prompt("Lets play Rock, Paper, Scissors, Lizard, Spock. First to 3 games wins!")
+  score = { user_score: 0, computer_score: 0 }
+  prompt("Lets play Rock, Paper, Scissors, Lizard, Spock.
+     First to 3 games wins!")
   loop do
+    sleep 2
     loop do
       display_valid_choices()
 
@@ -89,11 +94,16 @@ loop do
 
     computer_choice = VALID_CHOICES.keys.sample
 
-    prompt("You chose: #{VALID_CHOICES[user_choice]} and Computer chose: #{VALID_CHOICES[computer_choice]}")
+    sleep 1
+
+    prompt("You chose: #{VALID_CHOICES[user_choice]}
+       and Computer chose: #{VALID_CHOICES[computer_choice]}")
 
     display_result(user_choice, computer_choice)
 
     update_score(user_choice, computer_choice, score)
+
+    sleep 3
 
     display_score(score)
 
@@ -101,7 +111,7 @@ loop do
 
     break if (score[:user_score] == 3) || (score[:computer_score] == 3)
   end
-
+  sleep 2
   break unless play_again?()
 end
 
