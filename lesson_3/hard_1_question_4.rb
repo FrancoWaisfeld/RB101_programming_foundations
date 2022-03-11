@@ -6,7 +6,7 @@ def dot_separated_ip_address?(input_string)
   dot_separated_words = input_string.split(".")
 
   valid_ip_address = nil
-  pwdif dot_separated_words.size == 4
+  if dot_separated_words.size == 4
     dot_separated_words.each do |word|
       valid_ip_address = is_an_ip_number?(word)
     end
