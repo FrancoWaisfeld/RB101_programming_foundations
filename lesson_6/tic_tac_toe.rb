@@ -125,14 +125,13 @@ def find_best_move(brd)
   best_value = -1000
   best_depth = 10000
   best_move = nil
-
   (1..9).each do |space|
     if brd[space] == INITIAL_MARKER
       brd[space] = COMPUTER_MARKER
       move_value, depth = mini_max(brd, false, 0)
       brd[space] = INITIAL_MARKER
-
-      if (move_value > best_value) || ((move_value == best_value) && (depth < best_depth))
+      if (move_value > best_value) ||
+         ((move_value == best_value) && (depth < best_depth))
         best_move = space
         best_depth = depth
         best_value = move_value
