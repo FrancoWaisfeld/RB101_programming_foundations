@@ -123,16 +123,18 @@ end
 
 def find_best_move(brd)
   best_value = -1000
+  best_depth = 10000
   best_move = nil
 
   (1..9).each do |space|
     if brd[space] == INITIAL_MARKER
       brd[space] = COMPUTER_MARKER
-      move_value = mini_max(brd, false)
+      move_value, depth = mini_max(brd, false, 0)
       brd[space] = INITIAL_MARKER
 
-      if move_value > best_value
+      if (move_value > best_value) || ((move_value == best_value) && (depth < best_depth))
         best_move = space
+        best_depth = depth
         best_value = move_value
       end
     end
@@ -140,19 +142,21 @@ def find_best_move(brd)
   best_move
 end
 
-def mini_max(brd, is_max)
+def mini_max(brd, is_max, depth)
+  depth += 1
+
   score = minimizer_or_maximizer_victory(brd)
 
-  return score if score == 10
+  return [score, depth] if score == 10
 
-  return score if score == -10
+  return [score, depth] if score == -10
 
-  return 0 if board_full?(brd)
+  return [0, depth] if board_full?(brd)
 
   if is_max
-    maximizer(brd, is_max)
+    maximizer(brd, is_max, depth)
   else
-    minimizer(brd, is_max)
+    minimizer(brd, is_max, depth)
   end
 end
 
@@ -169,29 +173,33 @@ def minimizer_or_maximizer_victory(brd)
   winner
 end
 
-def maximizer(brd, is_max)
+def maximizer(brd, is_max, depth)
   best_score = -1000
+  mini_max_values = nil
   (1..9).each do |space|
     if brd[space] == INITIAL_MARKER
       brd[space] = COMPUTER_MARKER
-      best_score = [best_score, mini_max(brd, !(is_max))].max
+      mini_max_values = mini_max(brd, !(is_max), depth)
+      best_score = [best_score, mini_max_values[0]].max
       brd[space] = INITIAL_MARKER
     end
   end
-  best_score
+  [best_score, mini_max_values[1]]
 end
 
-def minimizer(brd, is_max)
+def minimizer(brd, is_max, depth)
   best_score = 1000
+  mini_max_values = nil
 
   (1..9).each do |space|
     if brd[space] == INITIAL_MARKER
       brd[space] = PLAYER_MARKER
-      best_score = [best_score, mini_max(brd, !(is_max))].min
+      mini_max_values = mini_max(brd, !(is_max), depth)
+      best_score = [best_score, mini_max_values[0]].min
       brd[space] = INITIAL_MARKER
     end
   end
-  best_score
+  [best_score, mini_max_values[1]]
 end
 
 prompt 'Let\'s play Tic-Tac-Toe! First to 5 games wins.'
