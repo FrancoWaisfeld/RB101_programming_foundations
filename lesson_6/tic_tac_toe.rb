@@ -1,6 +1,3 @@
-require 'pry'
-require 'pry-byebug'
-
 INITIAL_MARKER = ' '
 PLAYER_MARKER = 'X'
 COMPUTER_MARKER = 'O'
@@ -162,7 +159,6 @@ end
 def minimizer_or_maximizer_victory(brd)
   winner = 0
   WINNING_LINES.each do |line|
-    # binding.pry
     if brd.values_at(*line).count(COMPUTER_MARKER) == 3
       winner = 10
     elsif brd.values_at(*line).count(PLAYER_MARKER) == 3
